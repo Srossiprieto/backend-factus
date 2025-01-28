@@ -2,10 +2,10 @@
   "name": "backend-factus",
   "module": "index.ts",
   "type": "module",
-    "scripts": {
-        "dev": "bun run src/index.ts",
-        "build": "bun run src/index.ts --outdir dist",
-    },
+  "scripts": {
+    "dev": "bun run src/server.ts",
+    "build": "bun run src/index.ts --outdir dist"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^22.10.10",
@@ -13,5 +13,16 @@
   },
   "peerDependencies": {
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "prisma": "^6.2.1"
   }
 }
