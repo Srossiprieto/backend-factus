@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { generateToken } from '../utils/apiClient';
 import type { NextFunction, Request, Response } from 'express';
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,14 +8,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         if (!token) {
             return res.status(401).json({ error: 'Token no proporcionado' });
         }
-
         // Verificar y decodificar el token
         const decoded = jwt.verify(token, process.env.JWT_SECRET!);
         req.user = decoded;
-
-        // 2. Generar/verificar token de Factus
-        await generateToken();
-
         next();
     } catch (error) {
         res.status(401).json({ error: 'No autorizado' });

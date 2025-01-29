@@ -14,13 +14,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Factura {
-  id         Int      @id @default(autoincrement())
-  numero     String
-  cliente    String
-  productos  String
-  impuestos  String
-  createdAt  DateTime @default(now())
+model Bill {
+  id             Int      @id @default(autoincrement())
+  reference_code String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model User {

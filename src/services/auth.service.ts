@@ -1,14 +1,18 @@
-import { generateToken } from "@/utils/apiClient";
+import prisma from '@/config/prisma';
+import bcrypt from 'bcrypt';
+import type { User } from '@prisma/client';
 
-
-export const initializeAuth = async () => {
-    console.log('Inicializando autenticación...');
-  try {
-    await generateToken();
-    console.log('Autenticación inicializada correctamente.');
-  } catch (error: any) {
-    console.error('Error durante la inicialización de la autenticación:', error.message);
-    throw error;
-  }
+export const findUserByEmail = async (email: string): Promise<User | null> => {
+    return prisma.user.findUnique({ where: { email } });
 };
 
+export const createUser = async (email: string, password: string, name: string): Promise<User> => {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return prisma.user.create({
+        data: {
+            email,
+            password: hashedPassword,
+            name
+        }
+    });
+};

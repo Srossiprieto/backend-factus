@@ -1,37 +1,27 @@
-
-import apiClient, {generateToken, getAccessToken} from '../utils/apiClient';
+import { createBillInDB, getBillsFromDB } from '@/services/bills.service';
+import { billSchema } from '@/schemas/billSchema';
 import type { Request, Response } from 'express';
-     const getBills = async (req: Request, res: Response) => {
-        try {
-            let token = getAccessToken();
 
-            // Si no hay token, generarlo
-            if (!token) {
-                await generateToken();
-                token = getAccessToken();
-            }
 
-            // Si el token aún no está disponible, responder con error
-            if (!token) {
-                return res.status(401).json({ error: 'No se pudo generar un token de autenticación' });
-            }
 
-            const response = await apiClient.get('/v1/bills', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+export const createBill = async (req: Request, res: Response) => {
+  try {
+    console.log('Datos recibidos:', req.body); // Agregar esta línea para depuración
+    const billData = billSchema.parse(req.body);
 
-            res.status(200).json(response.data);
-        } catch (error: any) {
-            console.error('Error al obtener las facturas:', error.message);
-            if (error.response) {
-                console.error('Detalles del error:', error.response.data);
-                return res.status(error.response.status).json(error.response.data);
-            }
-            res.status(500).json({ error: 'Error al obtener las facturas' });
-        }
-    }
+    const bill = await createBillInDB(billData);
+    res.status(201).json(bill);
+  } catch (error: any) {
+    console.error('Error al crear la factura:', error); // Agregar esta línea para depuración
+    res.status(400).json({ message: error.message });
+  }
+};
 
-export default getBills;
-
+export const getBills = async (req: Request, res: Response) => {
+  try {
+    const bills = await getBillsFromDB();
+    res.status(200).json(bills);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};

@@ -1,27 +1,19 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import prisma from '@/config/prisma';
 import type { Request, Response } from 'express';
+import { createUser, findUserByEmail } from '@/services/auth.service';
 
 const registerCtrl = async (req: Request, res: Response) => {
     try {
         const { email, password, name } = req.body;
 
-        const existingUser = await prisma.user.findUnique({ where: { email } });
+        const existingUser = await findUserByEmail(email);
         if (existingUser) {
             return res.status(400).json({ error: 'El usuario ya existe' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const user = await prisma.user.create({
-            data: {
-                email,
-                password: hashedPassword,
-                name
-            }
-        });
+        const user = await createUser(email, password, name);
 
         const token = jwt.sign(
             { id: user.id, email: user.email },
@@ -39,7 +31,7 @@ const loginCtrl = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await findUserByEmail(email);
         if (!user) {
             return res.status(401).json({ error: 'Credenciales inválidas' });
         }
