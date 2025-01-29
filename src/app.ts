@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from '@/routes/auth.route';
+import billRoutes from '@/routes/bill.route';
 const app = express();
 
 app.use(cors());
@@ -11,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api', billRoutes);
 
 export default app;
 

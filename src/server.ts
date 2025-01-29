@@ -17,6 +17,7 @@ const fetchData = async () => {
     console.error('Error al obtener los datos:', error.message);
   }
 };
+/*
 
 const testAuthEndpoints = async () => {
   try {
@@ -45,10 +46,12 @@ const testAuthEndpoints = async () => {
   }
 };
 
+*/
+
 const startServer = async () => {
   try {
     console.log('Iniciando autenticación...');
-    await initializeAuth(); // Llama la inicialización de autenticación
+    // await initializeAuth(); // Llama la inicialización de autenticación
     console.log('Autenticación inicializada correctamente.');
 
     // Inicia el servidor
@@ -56,10 +59,10 @@ const startServer = async () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
 
       // Llama a testAuthEndpoints para probar login y register
-      await testAuthEndpoints();
+     // await testAuthEndpoints();
 
       // Llama a fetchData después de que el servidor haya iniciado y se haya autenticado
-      await fetchData();
+     // await fetchData();
     });
   } catch (error: any) {
     console.error('Error al iniciar el servidor:', error.message);
